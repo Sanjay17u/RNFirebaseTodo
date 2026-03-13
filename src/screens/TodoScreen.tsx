@@ -17,6 +17,14 @@ function TodoScreen() {
     const [goal4Completed, setGoal4Completed] = useState(false)
     const [goal5Completed, setGoal5Completed] = useState(false)
 
+
+    const completedCount =
+  (goal1Completed ? 1 : 0) +
+  (goal2Completed ? 1 : 0) +
+  (goal3Completed ? 1 : 0) +
+  (goal4Completed ? 1 : 0) +
+  (goal5Completed ? 1 : 0)
+
     return (
         <>
             <View>
@@ -33,13 +41,58 @@ function TodoScreen() {
                         <Text>{goal1Completed ? "✓" : "[ ]"}</Text>
                     </Pressable>
                     </View>     
+                    <View style={Styles.Goal_2}>
 
-                    <TextInput value={goal2} onChangeText={setGoal2} placeholder="Goal 2" />
-                    <TextInput value={goal3} onChangeText={setGoal3} placeholder="Goal 3" />
-                    <TextInput value={goal4} onChangeText={setGoal4} placeholder="Goal 4" />
-                    <TextInput value={goal5} onChangeText={setGoal5} placeholder="Goal 5" />
+                      <TextInput
+                        value={goal2}
+                        onChangeText={setGoal2}
+                        placeholder="Goal 2"
+                    />   
+                    
+                    <Pressable onPress={() => setGoal2Completed(!goal2Completed)}>
+                        <Text>{goal2Completed ? "✓" : "[ ]"}</Text>
+                    </Pressable>
+                    </View>     
+                    <View style={Styles.Goal_3}>
+
+                      <TextInput
+                        value={goal3}
+                        onChangeText={setGoal3}
+                        placeholder="Goal 3"
+                    />   
+                    
+                    <Pressable onPress={() => setGoal3Completed(!goal3Completed)}>
+                        <Text>{goal3Completed ? "✓" : "[ ]"}</Text>
+                    </Pressable>
+                    </View>     
+                    <View style={Styles.Goal_4}>
+
+                      <TextInput
+                        value={goal4}
+                        onChangeText={setGoal4}
+                        placeholder="Goal 4"
+                    />   
+                    
+                    <Pressable onPress={() => setGoal4Completed(!goal4Completed)}>
+                        <Text>{goal4Completed ? "✓" : "[ ]"}</Text>
+                    </Pressable>
+                    </View>     
+                    <View style={Styles.Goal_5}>
+
+                      <TextInput
+                        value={goal5}
+                        onChangeText={setGoal5}
+                        placeholder="Goal 5"
+                    />   
+                    
+                    <Pressable onPress={() => setGoal5Completed(!goal5Completed)}>
+                        <Text>{goal5Completed ? "✓" : "[ ]"}</Text>
+                    </Pressable>
+                    </View>     
+
+                    
   
-                <Text>0 / 5 Completed</Text>
+                <Text>{completedCount} / 5 Completed</Text>
             </View>
         </>
     )
@@ -52,5 +105,21 @@ const Styles = StyleSheet.create({
     Goal_1: {
         flexDirection: 'row',
         alignItems: 'center'
-    }
+    },
+    Goal_2: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    Goal_3: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    Goal_4: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    Goal_5: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
 })
