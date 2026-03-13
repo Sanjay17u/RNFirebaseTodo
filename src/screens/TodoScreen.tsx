@@ -29,7 +29,7 @@ function TodoScreen() {
         <>
             <View>
                 <Text>Today's Focus</Text>
-                    <View style={Styles.Goal_1}>
+                    <View style={Styles.goalRow}>
 
                       <TextInput
                         value={goal1}
@@ -41,7 +41,7 @@ function TodoScreen() {
                         <Text>{goal1Completed ? "✓" : "[ ]"}</Text>
                     </Pressable>
                     </View>     
-                    <View style={Styles.Goal_2}>
+                    <View style={Styles.goalRow}>
 
                       <TextInput
                         value={goal2}
@@ -53,7 +53,7 @@ function TodoScreen() {
                         <Text>{goal2Completed ? "✓" : "[ ]"}</Text>
                     </Pressable>
                     </View>     
-                    <View style={Styles.Goal_3}>
+                    <View style={Styles.goalRow}>
 
                       <TextInput
                         value={goal3}
@@ -65,7 +65,7 @@ function TodoScreen() {
                         <Text>{goal3Completed ? "✓" : "[ ]"}</Text>
                     </Pressable>
                     </View>     
-                    <View style={Styles.Goal_4}>
+                    <View style={Styles.goalRow}>
 
                       <TextInput
                         value={goal4}
@@ -77,7 +77,7 @@ function TodoScreen() {
                         <Text>{goal4Completed ? "✓" : "[ ]"}</Text>
                     </Pressable>
                     </View>     
-                    <View style={Styles.Goal_5}>
+                    <View style={Styles.goalRow}>
 
                       <TextInput
                         value={goal5}
@@ -92,7 +92,7 @@ function TodoScreen() {
 
                     
   
-                <Text>{completedCount} / 5 Completed</Text>
+                <Text style={Styles.TotalCount}>{completedCount} / 5 Completed</Text>
             </View>
         </>
     )
@@ -102,24 +102,24 @@ export default TodoScreen
 
 
 const Styles = StyleSheet.create({
-    Goal_1: {
-        flexDirection: 'row',
-        alignItems: 'center'
+goalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#f5f5f5',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 10
     },
-    Goal_2: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    Goal_3: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    Goal_4: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    Goal_5: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
+    
+input: {
+  flex: 1,
+  fontSize: 16
+},
+
+TotalCount: {
+    textAlign: 'center',
+    fontWeight: '800'
+}
+
 })
