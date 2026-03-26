@@ -1,100 +1,202 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, View, TextInput, Pressable, StyleSheet } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 function TodoScreen() {
 
-    const [goal1, setGoal1] = useState('')
-    const [goal2, setGoal2] = useState('')
-    const [goal3, setGoal3] = useState('')
-    const [goal4, setGoal4] = useState('')
-    const [goal5, setGoal5] = useState('')
+    const [isLoaded, setIsLoaded] = useState(false)
 
+    const [goals, setGoals] = useState({
+        goal1: '',
+        goal2: '',
+        goal3: '',
+        goal4: '',
+        goal5: ''
+    })
 
-    const [goal1Completed, setGoal1Completed] = useState(false)
-    const [goal2Completed, setGoal2Completed] = useState(false)
-    const [goal3Completed, setGoal3Completed] = useState(false)
-    const [goal4Completed, setGoal4Completed] = useState(false)
-    const [goal5Completed, setGoal5Completed] = useState(false)
+    const [completed, setCompleted] = useState({
+        goal1: false,
+        goal2: false,
+        goal3: false,
+        goal4: false,
+        goal5: false
+    })
 
 
     const completedCount =
-  (goal1Completed ? 1 : 0) +
-  (goal2Completed ? 1 : 0) +
-  (goal3Completed ? 1 : 0) +
-  (goal4Completed ? 1 : 0) +
-  (goal5Completed ? 1 : 0)
+        (completed.goal1 ? 1 : 0) +
+        (completed.goal2 ? 1 : 0) +
+        (completed.goal3 ? 1 : 0) +
+        (completed.goal4 ? 1 : 0) +
+        (completed.goal5 ? 1 : 0)
+
+    const allGoalsFilled =
+        goals.goal1.trim() !== '' &&
+        goals.goal2.trim() !== '' &&
+        goals.goal3.trim() !== '' &&
+        goals.goal4.trim() !== '' &&
+        goals.goal5.trim() !== ''
+
+
+    useEffect(() => {
+        if (!isLoaded) return
+
+        const saveData = async () => {
+            const data = {
+                goals,
+                completed
+            }
+
+            await AsyncStorage.setItem('todoData', JSON.stringify(data))
+        }
+
+        saveData()
+    }, [goals, completed, isLoaded])
+
+
+
+    useEffect(() => {
+        const loadData = async () => {
+            const data = await AsyncStorage.getItem('todoData')
+
+            if (data !== null) {
+                const parsed = JSON.parse(data)
+
+                setGoals(parsed.goals)
+                setCompleted(parsed.completed)
+            }
+
+            setIsLoaded(true)
+        }
+
+        loadData()
+    }, [])
 
     return (
-        <>
-            <View>
-                <Text>Today's Focus</Text>
-                    <View style={Styles.goalRow}>
 
-                      <TextInput
-                        value={goal1}
-                        onChangeText={setGoal1}
-                        placeholder="Goal 1"
-                    />   
-                    
-                    <Pressable onPress={() => setGoal1Completed(!goal1Completed)}>
-                        <Text>{goal1Completed ? "✓" : "[ ]"}</Text>
-                    </Pressable>
-                    </View>     
-                    <View style={Styles.goalRow}>
+        <View>
+            <Text>Today's Focus</Text>
+            <View style={Styles.goalRow}>
 
-                      <TextInput
-                        value={goal2}
-                        onChangeText={setGoal2}
-                        placeholder="Goal 2"
-                    />   
-                    
-                    <Pressable onPress={() => setGoal2Completed(!goal2Completed)}>
-                        <Text>{goal2Completed ? "✓" : "[ ]"}</Text>
-                    </Pressable>
-                    </View>     
-                    <View style={Styles.goalRow}>
+                <TextInput
+                    value={goals.goal1}
+                    onChangeText={(text) =>
+                        setGoals({ ...goals, goal1: text })
+                    }
+                    style={Styles.input}
+                    editable={!completed.goal1}
+                    placeholder="Goal 1"
+                />
 
-                      <TextInput
-                        value={goal3}
-                        onChangeText={setGoal3}
-                        placeholder="Goal 3"
-                    />   
-                    
-                    <Pressable onPress={() => setGoal3Completed(!goal3Completed)}>
-                        <Text>{goal3Completed ? "✓" : "[ ]"}</Text>
-                    </Pressable>
-                    </View>     
-                    <View style={Styles.goalRow}>
-
-                      <TextInput
-                        value={goal4}
-                        onChangeText={setGoal4}
-                        placeholder="Goal 4"
-                    />   
-                    
-                    <Pressable onPress={() => setGoal4Completed(!goal4Completed)}>
-                        <Text>{goal4Completed ? "✓" : "[ ]"}</Text>
-                    </Pressable>
-                    </View>     
-                    <View style={Styles.goalRow}>
-
-                      <TextInput
-                        value={goal5}
-                        onChangeText={setGoal5}
-                        placeholder="Goal 5"
-                    />   
-                    
-                    <Pressable onPress={() => setGoal5Completed(!goal5Completed)}>
-                        <Text>{goal5Completed ? "✓" : "[ ]"}</Text>
-                    </Pressable>
-                    </View>     
-
-                    
-  
-                <Text style={Styles.TotalCount}>{completedCount} / 5 Completed</Text>
+                <Pressable onPress={() => {
+                    if (allGoalsFilled) {
+                        setCompleted({
+                            ...completed,
+                            goal1: !completed.goal1
+                        })
+                    }
+                }}>
+                    <Text>{completed.goal1 ? "✓" : "[ ]"}</Text>
+                </Pressable>
             </View>
-        </>
+            <View style={Styles.goalRow}>
+
+                <TextInput
+                    value={goals.goal2}
+                    style={Styles.input}
+                    onChangeText={(text) =>
+                        setGoals({ ...goals, goal2: text })
+                    }
+                    editable={!completed.goal2}
+                    placeholder="Goal 2"
+                />
+
+                <Pressable onPress={() => {
+                    if (allGoalsFilled) {
+                        setCompleted({
+                            ...completed,
+                            goal2: !completed.goal2
+                        })
+                    }
+                }}>
+                    <Text>{completed.goal2 ? "✓" : "[ ]"}</Text>
+                </Pressable>
+            </View>
+            <View style={Styles.goalRow}>
+
+                <TextInput
+                    value={goals.goal3}
+                    style={Styles.input}
+                    onChangeText={(text) =>
+                        setGoals({ ...goals, goal3: text })
+                    }
+                    editable={!completed.goal3}
+                    placeholder="Goal 3"
+                />
+
+                <Pressable onPress={() => {
+                    if (allGoalsFilled) {
+                        setCompleted({
+                            ...completed,
+                            goal3: !completed.goal3
+                        })
+                    }
+                }}>
+                    <Text>{completed.goal3 ? "✓" : "[ ]"}</Text>
+                </Pressable>
+            </View>
+            <View style={Styles.goalRow}>
+
+                <TextInput
+                    value={goals.goal4}
+                    style={Styles.input}
+                    onChangeText={(text) =>
+                        setGoals({ ...goals, goal4: text })
+                    }
+                    editable={!completed.goal4}
+                    placeholder="Goal 4"
+                />
+
+                <Pressable onPress={() => {
+                    if (allGoalsFilled) {
+                        setCompleted({
+                            ...completed,
+                            goal4: !completed.goal4
+                        })
+                    }
+                }}>
+                    <Text>{completed.goal4 ? "✓" : "[ ]"}</Text>
+                </Pressable>
+            </View>
+            <View style={Styles.goalRow}>
+
+                <TextInput
+                    value={goals.goal5}
+                    style={Styles.input}
+                    onChangeText={(text) =>
+                        setGoals({ ...goals, goal5: text })
+                    }
+                    editable={!completed.goal5}
+                    placeholder="Goal 5"
+                />
+
+                <Pressable onPress={() => {
+                    if (allGoalsFilled) {
+                        setCompleted({
+                            ...completed,
+                            goal5: !completed.goal5
+                        })
+                    }
+                }}>
+                    <Text>{completed.goal5 ? "✓" : "[ ]"}</Text>
+                </Pressable>
+            </View>
+
+
+
+            <Text style={Styles.TotalCount}>{completedCount} / 5 Completed</Text>
+        </View>
     )
 }
 
@@ -102,24 +204,24 @@ export default TodoScreen
 
 
 const Styles = StyleSheet.create({
-goalRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#f5f5f5',
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 10
+    goalRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#f5f5f5',
+        padding: 12,
+        borderRadius: 10,
+        marginBottom: 10
     },
-    
-input: {
-  flex: 1,
-  fontSize: 16
-},
 
-TotalCount: {
-    textAlign: 'center',
-    fontWeight: '800'
-}
+    input: {
+        flex: 1,
+        fontSize: 16
+    },
+
+    TotalCount: {
+        textAlign: 'center',
+        fontWeight: '800'
+    }
 
 })
