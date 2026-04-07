@@ -7,6 +7,9 @@ import {
     View,
     TouchableOpacity
 } from 'react-native'
+import { getAuth, createUserWithEmailAndPassword } from '@react-native-firebase/auth'
+import { getApp } from '@react-native-firebase/app'
+import app from '@react-native-firebase/app'
 
 
 function SignupScreen({ navigation }: any) {
@@ -15,7 +18,8 @@ function SignupScreen({ navigation }: any) {
     const [password, setPassword] = useState('')
 
 
-    const handleSignup = () => {
+    const handleSignup = async () => {
+        console.log('App instance:', getApp())
         // basic validation
         if (!name || !email || !password) {
             Alert.alert('Please fill all fields')
@@ -31,12 +35,17 @@ function SignupScreen({ navigation }: any) {
             Alert.alert('Password must be at least 6 characters')
             return
         }
+        try {
+            // const app = getApp()
+            const authInstance = getAuth()
+            await createUserWithEmailAndPassword(authInstance, email, password)
 
-        // 🔥 Firebase call yaha aayega (future)
-        console.log('Signup Data:', name, email, password)
+            Alert.alert('Account created successfully')
 
-        // temporary navigation
-        navigation.navigate('Login')
+            navigation.replace('Todo')
+        } catch (error: any) {
+            Alert.alert(error.message)
+        }
     }
 
 

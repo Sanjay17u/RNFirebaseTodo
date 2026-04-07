@@ -8,6 +8,8 @@ import {
     View,
     TouchableOpacity
 } from 'react-native'
+import { getAuth, signInWithEmailAndPassword } from '@react-native-firebase/auth'
+import { getApp } from '@react-native-firebase/app'
 
 function LoginScreen() {
     const [email, setEmail] = useState('')
@@ -15,7 +17,7 @@ function LoginScreen() {
     const navigation = useNavigation<any>()
 
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!email || !password) {
             Alert.alert('Please enter email and password')
             return
@@ -25,11 +27,15 @@ function LoginScreen() {
             Alert.alert('Invalid email')
             return
         }
+        try {
+            // const app = getApp()
+            const authInstance = getAuth()
+            await signInWithEmailAndPassword(authInstance, email, password)
 
-        // 🔥 Firebase login yaha aayega (future)
-        console.log('Login Data:', email, password)
-
-        navigation.replace('Todo')
+            navigation.replace('Todo')
+        } catch (error: any) {
+            Alert.alert(error.message)
+        }
     }
 
 
