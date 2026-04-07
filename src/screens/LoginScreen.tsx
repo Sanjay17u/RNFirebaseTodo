@@ -11,10 +11,9 @@ import {
 import { getAuth, signInWithEmailAndPassword } from '@react-native-firebase/auth'
 import { getApp } from '@react-native-firebase/app'
 
-function LoginScreen() {
+function LoginScreen({ navigation }: any) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const navigation = useNavigation<any>()
 
 
     const handleLogin = async () => {
@@ -32,6 +31,7 @@ function LoginScreen() {
             const authInstance = getAuth()
             await signInWithEmailAndPassword(authInstance, email, password)
 
+            Alert.alert('Login successful')
             navigation.replace('Todo')
         } catch (error: any) {
             Alert.alert(error.message)
