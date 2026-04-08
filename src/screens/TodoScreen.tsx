@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, TextInput, Pressable, StyleSheet } from 'react-native'
+import { Text, View, TextInput, Pressable, StyleSheet, TouchableOpacity } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getAuth, signOut } from '@react-native-firebase/auth'
 
 
 function TodoScreen() {
@@ -72,6 +73,11 @@ function TodoScreen() {
 
         loadData()
     }, [])
+
+    const handleLogout = async () => {
+        const auth = getAuth()
+        await signOut(auth)
+    }
 
     return (
 
@@ -196,6 +202,9 @@ function TodoScreen() {
 
 
             <Text style={Styles.TotalCount}>{completedCount} / 5 Completed</Text>
+            <TouchableOpacity onPress={handleLogout}>
+                <Text>Logout</Text>
+            </TouchableOpacity>
         </View>
     )
 }
